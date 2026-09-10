@@ -1,3 +1,408 @@
+/* ===== Pinboard — thème coloré style Pinterest ===== */
+
+:root {
+    --pb-bg: #FAFAFA;
+    --pb-surface: #FFFFFF;
+    --pb-red: #E60023;
+    --pb-red-dark: #AD081B;
+    --pb-text: #211922;
+    --pb-text-muted: #767676;
+    --pb-border: #E9E9E9;
+    --pb-radius: 16px;
+}
+
 body {
-    background-color: skyblue;
+    background-color: var(--pb-bg);
+    color: var(--pb-text);
+    font-family: 'Poppins', -apple-system, sans-serif;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, .navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+/* ----- Navbar ----- */
+.navbar {
+    background-color: var(--pb-surface) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    padding: 0.75rem 0;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: var(--pb-red) !important;
+}
+
+.navbar-brand::before {
+    content: "\1F4CC";
+    margin-right: 6px;
+}
+
+.nav-link {
+    color: var(--pb-text) !important;
+    font-weight: 500;
+    border-radius: 24px;
+    padding: 8px 16px !important;
+    transition: background-color 0.15s ease;
+}
+
+.nav-link:hover {
+    background-color: #F0F0F0;
+}
+
+/* ----- Boutons ----- */
+.btn-primary {
+    background-color: var(--pb-red);
+    border: none;
+    border-radius: 24px;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 22px;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--pb-red-dark);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* ----- Grille de pins (masonry-like responsive) ----- */
+.pin-grid {
+    column-count: 5;
+    column-gap: 16px;
+}
+
+@media (max-width: 1200px) { .pin-grid { column-count: 4; } }
+@media (max-width: 900px)  { .pin-grid { column-count: 3; } }
+@media (max-width: 650px)  { .pin-grid { column-count: 2; } }
+@media (max-width: 420px)  { .pin-grid { column-count: 1; } }
+
+.pin-card {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    background-color: var(--pb-surface);
+    border-radius: var(--pb-radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.pin-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    color: inherit;
+}
+
+.pin-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.pin-card-body {
+    padding: 12px 14px 16px;
+}
+
+.pin-card-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: var(--pb-text);
+}
+
+.pin-card-meta {
+    font-size: 0.78rem;
+    color: var(--pb-text-muted);
+}
+
+/* ----- Formulaires ----- */
+.page-shell {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+}
+
+.page-shell.page-shell-form {
+    max-width: 960px;
+}
+
+.form-shell {
+    background: linear-gradient(180deg, #ffffff 0%, #fff8f8 100%);
+    border: 1px solid rgba(230, 0, 35, 0.08);
+    border-radius: 32px;
+    box-shadow: 0 24px 60px rgba(33, 25, 34, 0.08);
+    padding: 2rem;
+}
+
+.form-shell h1 {
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 0.95;
+    margin-bottom: 2rem !important;
+    letter-spacing: -0.04em;
+}
+
+.form-shell form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+/* ----- Spacing entre les champs dans form-shell ----- */
+.form-shell .form-group,
+.form-shell > div {
+    margin-bottom: 1rem;
+}
+
+.form-shell form > div,
+.form-shell .mb-3,
+.form-shell .form-group,
+.form-shell .vich-image {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-bottom: 0;
+}
+
+.form-shell input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: var(--pb-red);
+}
+
+.form-shell .form-check-label {
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+/* Bouton "save" genere par Symfony a l'interieur du form_widget */
+.form-shell button[type="submit"] {
+    background-color: var(--pb-red);
+    border: none;
+    border-radius: 24px;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 22px;
+    width: 100%;
+    margin-top: 0.5rem;
+    transition: background-color 0.15s ease;
+}
+
+.form-shell button[type="submit"]:hover {
+    background-color: var(--pb-red-dark);
+}
+
+/* Aperçu image Vich dans les formulaires */
+.form-shell .vich-image img,
+.form-shell img[src*="images/"] {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    margin: 8px 0;
+}
+
+
+label {
+    display: block;
+    font-weight: 500;
+    color: var(--pb-text);
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+}
+
+.form-control,
+textarea.form-control,
+select.form-select,
+.form-shell input[type="email"],
+.form-shell input[type="text"],
+.form-shell input[type="password"],
+.form-shell textarea,
+.form-shell select {
+    border: 1.5px solid var(--pb-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    background-color: #F5F5F5;
+    width: 100%;
+    min-height: 52px;
+}
+
+.form-shell textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.form-shell input[type="file"] {
+    width: 100%;
+    padding: 0.8rem 0.95rem;
+    border: 1.5px dashed rgba(230, 0, 35, 0.26);
+    border-radius: 18px;
+    background: #fff;
+}
+
+.form-control:focus,
+textarea.form-control:focus {
+    border-color: var(--pb-red);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.12);
+    outline: none;
+}
+
+/* ----- Alerts / flash ----- */
+.alert {
+    border-radius: 12px;
+    border: none;
+    font-weight: 500;
+}
+
+.alert-success {
+    background-color: #E3F9E5;
+    color: #1B873F;
+}
+
+.alert-danger {
+    background-color: #FDE8E8;
+    color: var(--pb-red-dark);
+}
+
+.alert-info {
+    background-color: #E5F3FF;
+    color: #0B5FB0;
+}
+
+/* ----- Avatar profil ----- */
+.account-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--pb-red);
+    display: block;
+    margin: 0 auto 1rem;
+}
+
+.account-page {
+    max-width: 960px;
+}
+
+.account-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fff6f7 100%);
+    border: 1px solid rgba(230, 0, 35, 0.08);
+    border-radius: 32px;
+    box-shadow: 0 24px 60px rgba(33, 25, 34, 0.08);
+    overflow: hidden;
+}
+
+.account-card-header {
+    padding: 2.25rem 2.25rem 1.5rem;
+    background: radial-gradient(circle at top left, rgba(230, 0, 35, 0.1), transparent 45%), #fff;
+    text-align: center;
+}
+
+.account-card-header h1 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -0.04em;
+    margin-bottom: 0.5rem;
+}
+
+.account-card-header p {
+    margin: 0;
+    color: var(--pb-text-muted);
+}
+
+.account-card-body {
+    padding: 1.5rem 2.25rem 2.25rem;
+}
+
+.account-meta {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+}
+
+.account-meta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(33, 25, 34, 0.06);
+}
+
+.account-meta-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--pb-text-muted);
+    margin: 0;
+}
+
+.account-meta-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--pb-text);
+    margin: 0;
+    text-align: right;
+}
+
+.account-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.link-back {
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1.5rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .page-shell {
+        padding: 1.25rem 0 3rem;
+    }
+
+    .form-shell,
+    .account-card-header,
+    .account-card-body {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    .account-meta-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .account-meta-value {
+        text-align: left;
+    }
+}
+
+/* ----- Footer ----- */
+footer {
+    background-color: var(--pb-surface) !important;
+    border-top: 1px solid var(--pb-border);
+    color: var(--pb-text-muted) !important;
+    font-size: 0.85rem;
+}
+
+a {
+    color: var(--pb-red);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--pb-red-dark);
 }

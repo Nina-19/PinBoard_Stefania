@@ -3,17 +3,19 @@
 {% block title %}Pinboard{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur Pinboard</h1>
+    <h1>Tous les pins</h1>
 
-    <div style="display:flex; flex-wrap:wrap; gap:20px;">
+    <div class="pin-grid">
         {% for pin in pins %}
-            <div style="width:220px; border:1px solid #ccc; padding:10px;">
+            <a href="{{ path('app_pin_show', {id: pin.id}) }}" class="pin-card">
                 {% if pin.imageName %}
-                    <img src="{{ vich_uploader_asset(pin, 'imageFile') }}" alt="{{ pin.title }}" style="width:100%; height:auto;">
+                    <img src="{{ vich_uploader_asset(pin, 'imageFile') }}" alt="{{ pin.title }}">
                 {% endif %}
-                <p><strong>{{ pin.title }}</strong></p>
-                <p>{{ pin.description|length > 50 ? pin.description|slice(0, 50) ~ '...' : pin.description }}</p>
-            </div>
+                <div class="pin-card-body">
+                    <div class="pin-card-title">{{ pin.title|length > 30 ? pin.title|slice(0, 30) ~ '...' : pin.title }}</div>
+                    <div class="pin-card-meta">{{ pin.createdAt|date('d/m/Y') }} · {{ pin.user.firstname }} {{ pin.user.lastname }}</div>
+                </div>
+            </a>
         {% else %}
             <p>Aucun pin pour le moment.</p>
         {% endfor %}

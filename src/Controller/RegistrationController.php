@@ -41,6 +41,9 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
+            // assign a default profile image
+            $user->setImageName('avatar.jpg');
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -53,9 +56,11 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            $this->addFlash('success', 'Votre compte a été créé avec succès. Vérifiez vos emails pour confirmer votre adresse.');
+            $this->addFlash('success', sprintf('Votre compte a été créé avec succès pour %s. Vérifiez vos emails pour confirmer votre adresse.', $user->getEmail()));
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_login', [
+                'email' => $user->getEmail(),
+            ]);
         }
 
         return $this->render('registration/register.html.twig', [

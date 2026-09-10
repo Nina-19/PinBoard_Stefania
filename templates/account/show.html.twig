@@ -3,15 +3,37 @@
 {% block title %}Mon compte{% endblock %}
 
 {% block body %}
-    <h1>Mon compte</h1>
+    <section class="page-shell account-page">
+        <div class="account-card">
+            <div class="account-card-header">
+                <img class="account-avatar" src="{{ app.user.imageName and app.user.imageName != 'avatar.jpg' ? vich_uploader_asset(app.user, 'imageFile') : asset('images/accounts/avatr.jpg') }}" alt="Photo de profil">
 
-    {% if app.user.imageName %}
-        <img src="{{ vich_uploader_asset(app.user, 'imageFile') }}" alt="Photo de profil" style="max-width:200px;">
-    {% endif %}
+                <h1>Mon profil</h1>
+                <p>{{ app.user.email }}</p>
+            </div>
 
-    <p><strong>Prénom :</strong> {{ app.user.firstname }}</p>
-    <p><strong>Nom :</strong> {{ app.user.lastname }}</p>
-    <p><strong>Compte créé le :</strong> {{ app.user.createdAt|date('d/m/Y H:i') }}</p>
+            <div class="account-card-body">
+                <div class="account-meta">
+                    <div class="account-meta-item">
+                        <p class="account-meta-label">Prénom</p>
+                        <p class="account-meta-value">{{ app.user.firstname }}</p>
+                    </div>
 
-    <a href="{{ path('app_account_edit') }}">Modifier mon profil</a>
+                    <div class="account-meta-item">
+                        <p class="account-meta-label">Nom</p>
+                        <p class="account-meta-value">{{ app.user.lastname }}</p>
+                    </div>
+
+                    <div class="account-meta-item">
+                        <p class="account-meta-label">Compte créé le</p>
+                        <p class="account-meta-value">{{ app.user.createdAt|date('d/m/Y H:i') }}</p>
+                    </div>
+                </div>
+
+                <div class="account-actions">
+                    <a href="{{ path('app_account_edit') }}" class="btn btn-primary">Modifier mon profil</a>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
