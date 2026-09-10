@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer {{ pin.title }}{% endblock %}
+
+{% block body %}
+    <h1>Éditer le pin</h1>
+
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_pin_show', {id: pin.id}) }}">Retour</a>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pinboard{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur Pinboard</h1>
+
+    <div style="display:flex; flex-wrap:wrap; gap:20px;">
+        {% for pin in pins %}
+            <div style="width:220px; border:1px solid #ccc; padding:10px;">
+                {% if pin.imageName %}
+                    <img src="{{ vich_uploader_asset(pin, 'imageFile') }}" alt="{{ pin.title }}" style="width:100%; height:auto;">
+                {% endif %}
+                <p><strong>{{ pin.title }}</strong></p>
+                <p>{{ pin.description|length > 50 ? pin.description|slice(0, 50) ~ '...' : pin.description }}</p>
+            </div>
+        {% else %}
+            <p>Aucun pin pour le moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
