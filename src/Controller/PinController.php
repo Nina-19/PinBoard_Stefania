@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pin;
 use App\Entity\User;
 use App\Form\PinType;
+use App\Repository\PinRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PinController extends AbstractController
 {
+    #[Route('/pin', name: 'app_pin_index')]
+    public function index(PinRepository $pinRepository): Response
+    {
+        $pins = $pinRepository->findBy([], ['createdAt' => 'DESC']);
+
+        return $this->render('pin/index.html.twig', [
+            'pins' => $pins,
+        ]);
+    }
+
     #[Route('/pin/create', name: 'app_pin_create')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -36,7 +47,7 @@ final class PinController extends AbstractController
 
             $this->addFlash('success', 'Le pin a été créé avec succès.');
 
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_pin_index');
         }
 
         return $this->render('pin/create.html.twig', [
@@ -57,7 +68,7 @@ final class PinController extends AbstractController
     {
         if (!$this->getUser() || $pin->getUser() !== $this->getUser()) {
             $this->addFlash('error', 'Vous ne pouvez pas modifier ce pin.');
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_pin_index');
         }
 
         $form = $this->createForm(PinType::class, $pin);
@@ -82,16 +93,22 @@ final class PinController extends AbstractController
     {
         if (!$this->getUser() || $pin->getUser() !== $this->getUser()) {
             $this->addFlash('error', 'Vous ne pouvez pas supprimer ce pin.');
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_pin_index');
         }
 
-        if ($this->isCsrfTokenValid('delete'.$pin->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($pin);
-            $entityManager->flush();
+        if ($request->isMethod('POST')) {
+            if ($this->isCsrfTokenValid('delete'.$pin->getId(), $request->request->get('_token'))) {
+                $entityManager->remove($pin);
+                $entityManager->flush();
 
-            $this->addFlash('info', 'Le pin a été supprimé.');
+                $this->addFlash('info', 'Le pin a été supprimé.');
+            }
+
+            return $this->redirectToRoute('app_pin_index');
         }
 
-        return $this->redirectToRoute('app_home');
+        return $this->render('pin/delete.html.twig', [
+            'pin' => $pin,
+        ]);
     }
 }

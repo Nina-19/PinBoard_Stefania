@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block body %}
+    <h1>Mon compte</h1>
+
+    {% if app.user.imageName %}
+        <img src="{{ vich_uploader_asset(app.user, 'imageFile') }}" alt="Photo de profil" style="max-width:200px;">
+    {% endif %}
+
+    <p><strong>Prénom :</strong> {{ app.user.firstname }}</p>
+    <p><strong>Nom :</strong> {{ app.user.lastname }}</p>
+    <p><strong>Compte créé le :</strong> {{ app.user.createdAt|date('d/m/Y H:i') }}</p>
+
+    <a href="{{ path('app_account_edit') }}">Modifier mon profil</a>
+{% endblock %}

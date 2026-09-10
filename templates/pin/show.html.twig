@@ -1,27 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ pin.title }}{% endblock %}
+{% block title %}{{ pin.title|length > 30 ? pin.title|slice(0, 30) ~ '...' : pin.title }}{% endblock %}
 
 {% block body %}
     <h1>{{ pin.title }}</h1>
 
     {% if pin.imageName %}
-        <img src="{{ vich_uploader_asset(pin, 'imageFile') }}" alt="{{ pin.title }}" style="max-width:400px;">
+        <img src="{{ vich_uploader_asset(pin, 'imageFile') }}" alt="{{ pin.title }}" style="max-width: 600px; width: 100%; height: auto;">
     {% endif %}
 
     <p>{{ pin.description }}</p>
 
-    <p>Publié le {{ pin.createdAt|date('d/m/Y H:i') }}</p>
+    <p>Par {{ pin.user.firstname }} {{ pin.user.lastname }}</p>
+
+    <p>Créé le {{ pin.createdAt|date('d/m/Y H:i') }}</p>
+    <p>Modifié le {{ pin.updatedAt|date('d/m/Y H:i') }}</p>
 
     {% if app.user and pin.user == app.user %}
         <a href="{{ path('app_pin_edit', {id: pin.id}) }}">Éditer</a>
-
-        <form method="post" action="{{ path('app_pin_delete', {id: pin.id}) }}"
-              onsubmit="return confirm('Voulez-vous vraiment supprimer ce pin ?');" style="display:inline">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pin.id) }}">
-            <button type="submit">Supprimer</button>
-        </form>
+        <a href="{{ path('app_pin_delete', {id: pin.id}) }}">Supprimer</a>
     {% endif %}
 
-    <a href="{{ path('app_home') }}">Retour</a>
+    <a href="{{ path('app_pin_index') }}">Retour</a>
 {% endblock %}
