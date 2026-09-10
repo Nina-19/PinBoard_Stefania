@@ -6,11 +6,14 @@ use App\Entity\Traits\Timestampable;
 use App\Repository\PinRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: PinRepository::class)]
 #[ORM\Table(name: 'pins')]
 #[ORM\HasLifecycleCallbacks]
+#[Vich\Uploadable]
 class Pin
 {
     #[ORM\Id]
@@ -26,8 +29,15 @@ class Pin
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[Vich\UploadableField(mapping: 'pin_images', fileNameProperty: 'imageName')]
+    private ?File $imageFile = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageName = null;
+
+    #[ORM\ManyToOne(inversedBy: 'pins')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     use Timestampable;
 
@@ -60,6 +70,20 @@ class Pin
         return $this;
     }
 
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->setUpdatedAt(new \DateTimeImmutable());
+        }
+    }
+
     public function getImageName(): ?string
     {
         return $this->imageName;
@@ -68,6 +92,18 @@ class Pin
     public function setImageName(?string $imageName): static
     {
         $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
