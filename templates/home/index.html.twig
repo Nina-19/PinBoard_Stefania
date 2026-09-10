@@ -3,21 +3,84 @@
 {% block title %}Pinboard{% endblock %}
 
 {% block body %}
-    <h1>Tous les pins</h1>
+    {% if pins is null %}
+        <section class="hero hero-landing">
+            <div class="hero-content">
+                <p class="hero-kicker">Collectionnez ce qui vous inspire</p>
+                <h1 class="hero-title">Transformez vos idées en tableaux vivants.</h1>
+                <p class="hero-subtitle">Pinboard rassemble vos images, références et envies dans un espace clair, rapide et visuel.</p>
 
-    <div class="pin-grid">
-        {% for pin in pins %}
-            <a href="{{ path('app_pin_show', {id: pin.id}) }}" class="pin-card">
-                {% if pin.imageName %}
-                    <img src="{{ vich_uploader_asset(pin, 'imageFile') }}" alt="{{ pin.title }}">
-                {% endif %}
-                <div class="pin-card-body">
-                    <div class="pin-card-title">{{ pin.title|length > 30 ? pin.title|slice(0, 30) ~ '...' : pin.title }}</div>
-                    <div class="pin-card-meta">{{ pin.createdAt|date('d/m/Y') }} · {{ pin.user.firstname }} {{ pin.user.lastname }}</div>
+                <div class="hero-metrics">
+                    <div class="hero-metric">
+                        <strong>Organiser</strong>
+                        <span>Vos inspirations sans friction</span>
+                    </div>
+                    <div class="hero-metric">
+                        <strong>Partager</strong>
+                        <span>Vos idées avec votre équipe</span>
+                    </div>
+                    <div class="hero-metric">
+                        <strong>Créer</strong>
+                        <span>Un mur d'images vivant</span>
+                    </div>
                 </div>
-            </a>
-        {% else %}
-            <p>Aucun pin pour le moment.</p>
-        {% endfor %}
-    </div>
+
+                <div class="hero-actions">
+                    <a href="{{ path('app_register') }}" class="btn btn-primary btn-lg">S'inscrire gratuitement</a>
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-dark btn-lg">Se connecter</a>
+                </div>
+            </div>
+
+            <div class="hero-visual" aria-hidden="true">
+                <div class="hero-orbit hero-orbit-one"></div>
+                <div class="hero-orbit hero-orbit-two"></div>
+                <div class="hero-glow hero-glow-one"></div>
+                <div class="hero-glow hero-glow-two"></div>
+
+                <article class="hero-float-card hero-float-card-main">
+                    <span class="hero-chip">Tendance</span>
+                    <h2>Palette solaire</h2>
+                    <p>Des tableaux lumineux, nets et faciles a retrouver.</p>
+                </article>
+
+                <article class="hero-float-card hero-float-card-side hero-float-card-top">
+                    <span class="hero-dot hero-dot-red"></span>
+                    <div>
+                        <strong>Ambiance</strong>
+                        <p>Capturer une idee en un geste.</p>
+                    </div>
+                </article>
+
+                <article class="hero-float-card hero-float-card-side hero-float-card-bottom">
+                    <span class="hero-dot hero-dot-gold"></span>
+                    <div>
+                        <strong>Inspiration</strong>
+                        <p>Construire un univers visuel coherent.</p>
+                    </div>
+                </article>
+
+                <div class="hero-stack hero-stack-left"></div>
+                <div class="hero-stack hero-stack-center"></div>
+                <div class="hero-stack hero-stack-right"></div>
+            </div>
+        </section>
+    {% else %}
+        <h1>Tous les pins</h1>
+
+        <div class="pin-grid">
+            {% for pin in pins %}
+                <a href="{{ path('app_pin_show', {id: pin.id}) }}" class="pin-card">
+                    {% if pin.imageName %}
+                        <img src="{{ vich_uploader_asset(pin, 'imageFile') }}" alt="{{ pin.title }}">
+                    {% endif %}
+                    <div class="pin-card-body">
+                        <div class="pin-card-title">{{ pin.title|length > 30 ? pin.title|slice(0, 30) ~ '...' : pin.title }}</div>
+                        <div class="pin-card-meta">{{ pin.createdAt|date('d/m/Y') }} · {{ pin.user.firstname }} {{ pin.user.lastname }}</div>
+                    </div>
+                </a>
+            {% else %}
+                <p>Aucun pin pour le moment.</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

@@ -55,7 +55,9 @@ final class PinController extends AbstractController
     #[Route('/pin/{id}/edit', name: 'app_pin_edit')]
     public function edit(Pin $pin, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->getUser() || $pin->getUser() !== $this->getUser()) {
+        $user = $this->getUser();
+
+        if (!$user instanceof User || $pin->getUser()?->getId() !== $user->getId()) {
             $this->addFlash('error', 'Vous ne pouvez pas modifier ce pin.');
             return $this->redirectToRoute('app_home');
         }
@@ -80,7 +82,9 @@ final class PinController extends AbstractController
     #[Route('/pin/{id}/delete', name: 'app_pin_delete')]
     public function delete(Pin $pin, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->getUser() || $pin->getUser() !== $this->getUser()) {
+        $user = $this->getUser();
+
+        if (!$user instanceof User || $pin->getUser()?->getId() !== $user->getId()) {
             $this->addFlash('error', 'Vous ne pouvez pas supprimer ce pin.');
             return $this->redirectToRoute('app_home');
         }
