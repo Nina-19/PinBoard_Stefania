@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\Timestampable;
 use App\Repository\PinRepository;
+use App\Validator\InappropriateWords;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -24,6 +25,7 @@ class Pin
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank(message: 'Le titre ne peut pas être vide.')]
     #[Assert\Length(min: 3, minMessage: 'Le titre doit contenir au moins {{ limit }} caractères.')]
+    #[InappropriateWords(['spam'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

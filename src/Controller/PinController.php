@@ -90,7 +90,7 @@ final class PinController extends AbstractController
                 $entityManager->remove($pin);
                 $entityManager->flush();
 
-                $this->addFlash('info', 'Le pin a été supprimé.');
+                $this->addFlash('error', 'Le pin a été supprimé.');
             }
 
             return $this->redirectToRoute('app_home');
